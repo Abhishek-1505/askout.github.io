@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hi Akshita!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffe4e1, #fff0f5);
+      color: #333;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    .overlay {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 2.2rem;
+    }
+    .btn {
+      background-color: #ffb6c1;
+      border: none;
+      padding: 12px 24px;
+      margin: 8px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #ff85a2;
+    }
+    .content {
+      max-width: 450px;
+      margin-top: 20px;
+      text-align: left;
+      background: #fffafc;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .hidden {
+      display: none;
+    }
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .emoji-pop {
+      font-size: 2.5rem;
+      animation: pop 0.6s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.2); opacity: 0; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+    #main-question {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  <div class="overlay">
+    <h1>Hi Akshita!</h1>
+    <p id="main-question">Will you go on a date with me?</p>
+    <div>
+      <button class="btn" onclick="showSection('whySection')">Why Should You Date Me?</button>
+      <button class="btn" onclick="showSection('ideasSection')">Potential date ideas</button>
+      <button class="btn" onclick="showSection('replySection')">Reply</button>
+    </div>
+
+    <div id="whySection" class="content hidden">
+      <h2>Why you should date me</h2>
+      <ul>
+        <li>I will take unlimited pictures of you until you like one (yes, angles matter).</li>
+        <li>I will laugh at all your jokes, even the ones I don’t get.</li>
+        <li>I remember the random things you say, even if you forget saying them.</li>
+        <li>I will give you the last fry. Sometimes.</li>
+        <li>I’ll always listen about your day.</li>
+        <li>I’ll remind you to drink water and eat like a mildly annoying health app.</li>
+        <li>I’ll root for you every single day, in every little thing.</li>
+      </ul>
+    </div>
+
+    <div id="ideasSection" class="content hidden">
+      <h2>Potential date ideas</h2>
+      <ul>
+        <li>Grab a coffee and pretend we’re productive people with things to discuss.</li>
+        <li>Watch <em>Lilo &amp; Stitch</em>.</li>
+        <li>Brunch somewhere cute, judge menu prices together, and order chai anyway.</li>
+        <li>Walk around Cubbon Park like we’re the main leads in a romcom.</li>
+        <li>Find a quiet spot, do absolutely nothing, and still have the best time.</li>
+      </ul>
+    </div>
+
+    <div id="replySection" class="content hidden">
+      <h2>Your answer?</h2>
+      <button class="btn" onclick="handleReply(true)">Yes</button>
+      <button class="btn" onclick="handleReply(false)">No</button>
+    </div>
+
+    <div id="confirmSection" class="content hidden">
+      <h2>Your answer?</h2>
+      <p style="font-family: inherit; font-size: 1.5rem;">Are you absolutely sure? 🥺</p>
+      <button class="btn" onclick="handleConfirm(true)">Yes</button>
+      <button class="btn" onclick="handleConfirm(false)">No</button>
+    </div>
+
+    <div id="prettySection" class="content hidden">
+      <p style="font-size: 1.5rem;">Pretty please?</p>
+      <button class="btn" onclick="handlePretty(true)">Yes</button>
+      <button class="btn" onclick="handlePretty(false)">No</button>
+    </div>
+
+    <div id="stuckSection" class="content hidden">
+      <p style="font-size: 1.5rem;">You are stuck with me!</p>
+      <button class="btn" onclick="finalYes()">Yes</button>
+      <button class="btn" onclick="finalYes()">Yes</button>
+    </div>
+
+    <div id="successSection" class="content hidden">
+      <h2>Excellent decision!</h2>
+      <p>Call me 😊</p>
+    </div>
+  </div>
+
+  <div id="emoji-container" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;"></div>
+
+  <script>
+    function showSection(id) {
+      ['whySection','ideasSection','replySection','confirmSection','prettySection','stuckSection','successSection'].forEach(sec => {
+        document.getElementById(sec).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function handleReply(answer) {
+      if(answer) {
+        showSection('successSection');
+        launchConfetti();
+      } else {
+        showSadEmoji();
+        showSection('confirmSection');
+      }
+    }
+
+    function handleConfirm(yes) {
+      if(yes) {
+        showSection('successSection');
+        launchConfetti();
+      } else {
+        showSadEmoji();
+        showSection('prettySection');
+      }
+    }
+
+    function handlePretty(yes) {
+      if(yes) {
+        showSection('successSection');
+        launchConfetti();
+      } else {
+        showSadEmoji();
+        showSection('stuckSection');
+      }
+    }
+
+    function finalYes() {
+      showSection('successSection');
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      const duration = 3 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+      const interval = setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+        confetti(Object.assign({}, defaults, {
+          particleCount: 50,
+          origin: { x: Math.random(), y: Math.random() - 0.2 }
+        }));
+      }, 250);
+    }
+
+    function showSadEmoji() {
+      const emojiContainer = document.getElementById('emoji-container');
+      const emoji = document.createElement('div');
+      emoji.className = 'emoji-pop';
+      emoji.innerText = ['😢','😭','🥺'][Math.floor(Math.random() * 3)];
+      emojiContainer.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 1000);
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>
